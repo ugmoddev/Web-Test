@@ -1,331 +1,228 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trang test trình duyệt - Chrome / Chromium</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0c10">
+<title>Browser Lab — Kiểm tra trình duyệt</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #0b0c10;
-    --card: #11171e;
-    --card-2: #1f2833;
-    --border: #3a3f4b;
-    --text: #c5c6c7;
-    --muted: #8e9aaf;
-    --accent: #66fcf1;
-    --ok: #4ade80;
-    --warn: #fbbf24;
-    --bad: #f87171;
-  }
-  body {
-    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    padding: 24px;
-    line-height: 1.5;
-  }
-  .container { max-width: 920px; margin: 0 auto; }
-  header { margin-bottom: 18px; }
-  h1 { font-size: 1.15rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
-  .sub { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
-
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; margin-bottom: 16px; }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px;
-  }
-  .card h2 {
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--accent);
-    margin-bottom: 10px;
-  }
-  .row { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid #222c39; }
-  .row:last-child { border-bottom: none; }
-  .label { font-size: 0.88rem; color: var(--muted); white-space: nowrap; }
-  .value {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Noto Mono", monospace;
-    font-size: 0.9rem;
-    color: var(--text);
-    text-align: right;
-    min-width: 110px;
-  }
-  .value.ok { color: var(--ok); }
-  .value.warn { color: var(--warn); }
-  .value.bad { color: var(--bad); }
-  .value.accent { color: var(--accent); }
-
-  .controls { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
-  button {
-    background: var(--accent); color: #0b0c10; border: none; border-radius: 6px;
-    padding: 10px 18px; font-size: 0.92rem; font-weight: 700; cursor: pointer;
-  }
-  button:hover { opacity: 0.9; }
-  button:active { transform: scale(0.97); }
-  button.secondary { background: var(--card-2); color: var(--text); border: 1px solid var(--border); }
-
-  .log-card { background: #0c1219; border: 1px solid var(--border); border-radius: 10px; height: 360px; display: flex; flex-direction: column; }
-  #log {
-    overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 5px;
-    font-size: 0.82rem;
-  }
-  .log-entry {
-    padding: 5px 9px; border-radius: 5px; border-left: 3px solid var(--accent);
-    background: var(--card-2); display: flex; gap: 10px; align-items: flex-start;
-  }
-  .log-time { font-family: monospace; color: var(--muted); min-width: 64px; }
-  .log-type { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; min-width: 78px; }
-  .log-msg { color: var(--text); word-break: break-word; }
-
-  .hint { margin-top: 14px; font-size: 0.82rem; color: var(--muted); border-top: 1px solid var(--border); padding-top: 12px; }
-  .badge {
-    display: inline-block; padding: 1px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 800;
-    border: 1px solid; text-transform: uppercase;
-  }
-  .b-vis { color: var(--accent); border-color: var(--accent); background: rgba(102,252,241,0.08); }
-  .b-hidden { color: var(--warn); border-color: var(--warn); background: rgba(251,191,36,0.08); }
-  .b-focus { color: var(--ok); border-color: var(--ok); background: rgba(74,222,128,0.08); }
-  .b-blur { color: var(--bad); border-color: var(--bad); background: rgba(248,113,113,0.08); }
+  :root { color-scheme: dark; --bg:#0b0c10; --card:#11171e; --card2:#1a2430; --border:#303b49; --text:#e2e8f0; --muted:#91a0b5; --accent:#66fcf1; --ok:#4ade80; --warn:#fbbf24; --bad:#fb7185; }
+  body { font: 15px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; background:radial-gradient(ellipse at 50% -20%,#172533 0,var(--bg) 54%); color:var(--text); padding:24px; min-height:100vh; }
+  .container { max-width:1120px; margin:auto; }
+  header { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin:4px 0 20px; }
+  h1 { font-size:clamp(1.2rem,3vw,1.65rem); letter-spacing:.035em; color:var(--accent); }
+  .sub { color:var(--muted); font-size:.9rem; margin-top:5px; max-width:740px; }
+  .privacy { white-space:nowrap; font-size:.76rem; border:1px solid #25634e; color:var(--ok); padding:5px 9px; border-radius:99px; }
+  .status { padding:12px 15px; border-radius:10px; border:1px solid var(--border); background:var(--card); margin-bottom:16px; display:flex; gap:11px; align-items:flex-start; }
+  .status-dot { width:10px; height:10px; background:var(--ok); border-radius:50%; margin-top:6px; flex:none; box-shadow:0 0 14px currentColor; }
+  .status.warn { border-color:#765a15; background:#211b0e; }.status.warn .status-dot { background:var(--warn); }
+  .status strong { display:block; font-size:.92rem; }.status p { color:var(--muted); font-size:.82rem; margin-top:2px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(245px,1fr)); gap:14px; margin-bottom:15px; }
+  .card { background:linear-gradient(145deg,#121a22,var(--card)); border:1px solid var(--border); border-radius:12px; padding:16px; min-width:0; }
+  .card h2 { text-transform:uppercase; font-size:.76rem; letter-spacing:.08em; color:var(--accent); margin-bottom:10px; }
+  .row { display:flex; justify-content:space-between; align-items:baseline; gap:12px; padding:7px 0; border-bottom:1px solid #222c39; }
+  .row:last-child { border-bottom:0; }.label { color:var(--muted); font-size:.82rem; }.value { color:var(--text); text-align:right; font: .84rem ui-monospace,SFMono-Regular,Menlo,monospace; overflow-wrap:anywhere; }.ok { color:var(--ok)!important; }.warn-text { color:var(--warn)!important; }.bad { color:var(--bad)!important; }.accent { color:var(--accent)!important; }
+  .controls { display:flex; flex-wrap:wrap; gap:9px; align-items:center; margin:0 0 15px; }
+  button { background:var(--accent); color:#091215; border:0; border-radius:7px; padding:9px 14px; font-weight:750; font-size:.86rem; cursor:pointer; }
+  button:hover { filter:brightness(.92); } button:focus-visible,input:focus-visible { outline:2px solid white; outline-offset:2px; }
+  button.secondary { background:var(--card2); color:var(--text); border:1px solid var(--border); }
+  button.danger { background:#321820; color:#fecdd3; border:1px solid #733143; }
+  .toggle { display:flex; align-items:center; gap:8px; padding:8px 11px; background:var(--card); border:1px solid var(--border); border-radius:7px; color:var(--text); font-size:.85rem; }
+  .toggle input { accent-color:var(--accent); width:16px; height:16px; }
+  .log-card { padding:15px; }.log-head { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:10px; }.log-head h2 { margin:0; }
+  .log-tools { display:flex; gap:8px; flex-wrap:wrap; }.log-tools input { min-width:180px; background:#0c1219; color:var(--text); border:1px solid var(--border); border-radius:6px; padding:8px 10px; }
+  #log { height:300px; overflow:auto; display:flex; flex-direction:column; gap:5px; padding:2px; }
+  .log-entry { display:grid; grid-template-columns:92px 132px 1fr; gap:9px; padding:7px 9px; border-radius:6px; border-left:3px solid var(--accent); background:var(--card2); font-size:.8rem; }
+  .log-time { color:var(--muted); font-family:monospace; }.log-type { font-weight:800; text-transform:uppercase; font-size:.72rem; color:var(--accent); }.log-msg { overflow-wrap:anywhere; }
+  .hint { margin-top:14px; color:var(--muted); font-size:.81rem; }.hint ul { padding-left:20px; margin-top:6px; }.hint li { margin:4px 0; }
+  code { color:var(--accent); }.foot { color:#718096; font-size:.76rem; margin:14px 2px 0; }
+  @media(max-width:600px) { body { padding:15px; } header { display:block; } .privacy { display:inline-block; margin-top:9px; } .log-entry { grid-template-columns:78px 1fr; }.log-msg { grid-column:1/-1; }.log-time { font-size:.72rem; } }
 </style>
 </head>
 <body>
-<div class="container">
+<main class="container">
   <header>
-    <h1>Trang test trình duyệt</h1>
-    <div class="sub">Kiểm tra hành vi Chrome / Chromium khi chuyển tab, Alt + Tab và toàn màn hình — chỉ dùng để tự test, không có mã độc, không khóa cửa sổ.</div>
+    <div><h1>Browser Lab <span style="font-weight:400">/ Kiểm tra trình duyệt</span></h1><p class="sub">Theo dõi trạng thái tab, focus, fullscreen, hiệu năng và các tín hiệu có thể liên quan đến DevTools. Dùng để tự kiểm tra — không khóa cửa sổ, không gửi dữ liệu đi đâu.</p></div>
+    <span class="privacy">● Chạy cục bộ · Không gửi dữ liệu</span>
   </header>
 
-  <div class="grid">
-    <!-- Visibility -->
-    <div class="card">
-      <h2>VisibilityState / hidden</h2>
-      <div class="row"><span class="label">document.visibilityState</span><span id="vs" class="value accent">—</span></div>
+  <section id="antiStatus" class="status" role="status" aria-live="polite">
+    <span class="status-dot"></span><div><strong id="antiTitle">Giám sát nhẹ đang hoạt động</strong><p id="antiDescription">Chưa thấy tín hiệu rõ ràng. Phát hiện DevTools trên trình duyệt không thể chính xác tuyệt đối.</p></div>
+  </section>
+
+  <section class="grid" aria-label="Thông tin trình duyệt">
+    <article class="card"><h2>DevTools · tín hiệu heuristic</h2>
+      <div class="row"><span class="label">Trạng thái</span><span id="devStatus" class="value ok">Chưa phát hiện</span></div>
+      <div class="row"><span class="label">Chênh lệch cửa sổ (W × H)</span><span id="devDelta" class="value">—</span></div>
+      <div class="row"><span class="label">Phím tắt DevTools</span><span id="devShortcut" class="value">Chưa ghi nhận</span></div>
+      <div class="row"><span class="label">Sự kiện đáng chú ý</span><span id="signalCount" class="value">0</span></div>
+    </article>
+    <article class="card"><h2>Visibility &amp; focus</h2>
+      <div class="row"><span class="label">visibilityState</span><span id="vs" class="value accent">—</span></div>
       <div class="row"><span class="label">document.hidden</span><span id="hidden" class="value">—</span></div>
-    </div>
-
-    <!-- Focus -->
-    <div class="card">
-      <h2>Window focus</h2>
-      <div class="row"><span class="label">document.hasFocus()</span><span id="hasfocus" class="value">—</span></div>
-      <div class="row"><span class="label">Trạng thái gần nhất</span><span id="laststate" class="value">—</span></div>
-      <div class="row"><span class="label">Lần focus</span><span id="focusCount" class="value ok">0</span></div>
-      <div class="row"><span class="label">Lần blur</span><span id="blurCount" class="value bad">0</span></div>
-    </div>
-
-    <!-- Fullscreen -->
-    <div class="card">
-      <h2>Fullscreen &amp; kích thước</h2>
-      <div class="row"><span class="label">document.fullscreenElement</span><span id="fullscreenEl" class="value accent">(none)</span></div>
-      <div class="row"><span class="label">innerWidth × innerHeight</span><span id="innerWH" class="value">—</span></div>
-      <div class="row"><span class="label">outerWidth × outerHeight</span><span id="outerWH" class="value">—</span></div>
-      <div class="row"><span class="label">screen.width × screen.height</span><span id="screenWH" class="value">—</span></div>
-    </div>
-
-    <!-- Background tick -->
-    <div class="card">
-      <h2>Nhịp chạy nền (tick)</h2>
-      <div class="row"><span class="label">Bộ đếm interval (100 ms)</span><span id="tickCount" class="value">0</span></div>
-      <div class="row"><span class="label">Khoảng cách tick gần nhất</span><span id="lastTickInterval" class="value">—</span></div>
-      <div class="row"><span class="label">FPS (requestAnimationFrame)</span><span id="fps" class="value">—</span></div>
-    </div>
-  </div>
+      <div class="row"><span class="label">hasFocus()</span><span id="hasfocus" class="value">—</span></div>
+      <div class="row"><span class="label">Focus / Blur</span><span id="focusCounts" class="value">0 / 0</span></div>
+    </article>
+    <article class="card"><h2>Cửa sổ &amp; fullscreen</h2>
+      <div class="row"><span class="label">Fullscreen</span><span id="fullscreenEl" class="value accent">Không</span></div>
+      <div class="row"><span class="label">inner (W × H)</span><span id="innerWH" class="value">—</span></div>
+      <div class="row"><span class="label">outer (W × H)</span><span id="outerWH" class="value">—</span></div>
+      <div class="row"><span class="label">screen (W × H)</span><span id="screenWH" class="value">—</span></div>
+    </article>
+    <article class="card"><h2>Timer &amp; hiệu năng</h2>
+      <div class="row"><span class="label">Tick nền (100 ms)</span><span id="tickCount" class="value">0</span></div>
+      <div class="row"><span class="label">Khoảng cách tick</span><span id="lastTickInterval" class="value">—</span></div>
+      <div class="row"><span class="label">FPS (ước tính)</span><span id="fps" class="value">—</span></div>
+      <div class="row"><span class="label">Độ trễ gần nhất</span><span id="eventLoopLag" class="value">—</span></div>
+    </article>
+    <article class="card"><h2>Môi trường</h2>
+      <div class="row"><span class="label">Trình duyệt</span><span id="browser" class="value">—</span></div>
+      <div class="row"><span class="label">Ngôn ngữ</span><span id="language" class="value">—</span></div>
+      <div class="row"><span class="label">Kết nối</span><span id="online" class="value">—</span></div>
+      <div class="row"><span class="label">Múi giờ</span><span id="timezone" class="value">—</span></div>
+    </article>
+  </section>
 
   <div class="controls">
-    <button id="btnFullscreen">Bật Fullscreen</button>
-    <button class="secondary" id="btnReset">Reset Log</button>
+    <button id="btnFullscreen">Bật fullscreen</button>
+    <button id="btnPause" class="secondary">Tạm dừng log</button>
+    <button id="btnExport" class="secondary">Tải log (.txt)</button>
+    <button id="btnCopy" class="secondary">Copy log</button>
+    <button id="btnReset" class="danger">Xóa log</button>
+    <label class="toggle"><input id="monitorToggle" type="checkbox" checked> Bật giám sát heuristic</label>
   </div>
 
-  <div class="card log-card">
-    <h2 style="margin-bottom: 10px;">Event Log (dòng thời gian)</h2>
-    <div id="log"></div>
-  </div>
+  <section class="card log-card">
+    <div class="log-head"><h2>Event log · dòng thời gian</h2><div class="log-tools"><input id="logSearch" type="search" placeholder="Lọc log…" aria-label="Lọc log"><span id="logCount" class="value">0 sự kiện</span></div></div>
+    <div id="log" aria-live="polite"></div>
+  </section>
 
-  <div class="hint">
-    <b>Cách kiểm tra:</b>
-    <ul style="margin: 6px 0 0 18px; padding: 0;">
-      <li>Chuyển sang tab khác hoặc bấm Alt + Tab sang ứng dụng khác &rarr; quan sát <code>visibilityState</code> trở thành <i>hidden</i>, <code>document.hasFocus()</i> về <i>false</i>, và khoảng cách tick tăng lên (Chrome làm chậm timer trong tab nền).</li>
-      <li>Quay lại tab &rarr; <code>visibilityState</code> về <i>visible</i>, <code>hasFocus</i> về <i>true</i>.</li>
-      <li>Bấm <b>Bật Fullscreen</b> hoặc phím <b>F11</b> &rarr; quan sát <code>fullscreenElement</code> và kích thước cửa sổ thay đổi.</li>
-      <li>Thay đổi kích thước cửa sổ &rarr; sự kiện <code>resize</code> được ghi log.</li>
+  <section class="hint"><strong>Cách dùng &amp; giới hạn:</strong>
+    <ul>
+      <li>Chuyển tab, Alt+Tab, đổi kích thước cửa sổ hoặc bật fullscreen để quan sát các chỉ số và log.</li>
+      <li>Giám sát DevTools chỉ dựa trên chênh lệch kích thước cửa sổ và phím tắt F12 / Ctrl+Shift+I,J,C (hoặc Cmd+Option+I,J,C trên macOS). Có thể báo nhầm; dock DevTools không phải lúc nào cũng làm thay đổi kích thước.</li>
+      <li>Trang không chặn phím tắt, chuột phải, menu trình duyệt hay công cụ phát triển. JavaScript phía trình duyệt không thể cung cấp biện pháp bảo vệ đáng tin cậy cho mã hoặc dữ liệu; không đặt bí mật ở phía client.</li>
+      <li>Log và thông tin môi trường chỉ tồn tại trong trang này. Tải xuống/copy log là thao tác do bạn chủ động thực hiện.</li>
     </ul>
-  </div>
-</div>
-
+  </section>
+  <p class="foot">Browser Lab · Bản thử nghiệm cục bộ</p>
+</main>
 <script>
+(() => {
+  'use strict';
   const $ = (id) => document.getElementById(id);
-
-  const state = {
-    visibilityState: document.visibilityState,
-    hidden: document.hidden,
-    hasFocus: document.hasFocus(),
-    lastWindowState: document.hasFocus() ? 'focus' : 'blur',
-    focusCount: 0,
-    blurCount: 0,
-    fullscreenElement: document.fullscreenElement || null,
-    innerW: window.innerWidth, innerH: window.innerHeight,
-    outerW: window.outerWidth, outerH: window.outerHeight,
-    screenW: screen.width, screenH: screen.height,
-    tickCount: 0,
-    lastTickInterval: '—',
-    lastTickTime: '—',
-    fps: 0
-  };
-
-  function escapeHtml(text) {
-    const d = document.createElement('div');
-    d.textContent = text;
-    return d.innerHTML;
+  const state = { focus: 0, blur: 0, ticks: 0, lastTick: null, fps: 0, signals: 0, shortcut: 'Chưa ghi nhận', monitor: true, paused: false, entries: [], devtoolsLikely: false };
+  const escape = (s) => { const d = document.createElement('div'); d.textContent = String(s); return d.innerHTML; };
+  const nowStr = () => new Date().toLocaleTimeString('vi-VN', {hour12:false}) + '.' + String(new Date().getMilliseconds()).padStart(3,'0');
+  function log(type, msg) {
+    if (state.paused && type !== 'system') return;
+    const item = { time: nowStr(), type: String(type), msg: String(msg) };
+    state.entries.push(item);
+    if (state.entries.length > 1000) state.entries.shift();
+    renderLog();
   }
-
-  function nowStr() {
-    const d = new Date();
-    const ms = String(d.getMilliseconds()).padStart(3, '0');
-    return d.toLocaleTimeString('vi-VN', { hour12: false }) + '.' + ms;
+  function renderLog() {
+    const q = $('logSearch').value.trim().toLocaleLowerCase();
+    const matched = state.entries.filter(e => !q || `${e.time} ${e.type} ${e.msg}`.toLocaleLowerCase().includes(q));
+    const box = $('log');
+    box.innerHTML = matched.map(e => `<div class="log-entry"><span class="log-time">${escape(e.time)}</span><span class="log-type">${escape(e.type)}</span><span class="log-msg">${escape(e.msg)}</span></div>`).join('');
+    box.scrollTop = box.scrollHeight;
+    $('logCount').textContent = `${matched.length}${matched.length !== state.entries.length ? ` / ${state.entries.length}` : ''} sự kiện`;
   }
-
-  function log(type, msg, cls) {
-    const entry = document.createElement('div');
-    entry.className = 'log-entry ' + (cls || '');
-    entry.innerHTML =
-      `<div class="log-time">${escapeHtml(nowStr())}</div>` +
-      `<div class="log-type">${escapeHtml(type)}</div>` +
-      `<div class="log-msg">${escapeHtml(msg)}</div>`;
-    const container = $('log');
-    container.appendChild(entry);
-    container.scrollTop = container.scrollHeight;
+  function val(id, text, cls) { const el = $(id); el.textContent = text; el.className = 'value' + (cls ? ` ${cls}` : ''); }
+  function dimensions() {
+    $('innerWH').textContent = `${innerWidth} × ${innerHeight}`;
+    $('outerWH').textContent = `${outerWidth} × ${outerHeight}`;
+    $('screenWH').textContent = `${screen.width} × ${screen.height}`;
+    const dx = Math.max(0, outerWidth - innerWidth), dy = Math.max(0, outerHeight - innerHeight);
+    $('devDelta').textContent = `${dx} × ${dy} px`;
+    checkDevtools(dx, dy);
   }
-
-  function setValue(id, text, cls) {
-    const el = $(id);
-    if (!el) return;
-    el.textContent = text;
-    if (cls) {
-      el.className = 'value ' + cls;
+  function checkDevtools(dx, dy) {
+    if (!state.monitor) return;
+    // Coarse heuristic only: normal browser chrome and window geometry can produce similar gaps.
+    const likely = dx > 260 || dy > 260;
+    if (likely !== state.devtoolsLikely) {
+      state.devtoolsLikely = likely;
+      state.signals++;
+      if (likely) log('devtools-heuristic', `Chênh lệch kích thước lớn (${dx} × ${dy}px); có thể do DevTools, nhưng cũng có thể do giao diện trình duyệt/khác.`);
+      updateStatus();
     }
+    val('devStatus', likely ? 'Có tín hiệu kích thước' : 'Chưa phát hiện', likely ? 'warn-text' : 'ok');
   }
-
-  function updateUI() {
-    setValue('vs', state.visibilityState, state.hidden ? 'warn' : 'ok');
-    setValue('hidden', String(state.hidden), state.hidden ? 'warn' : 'ok');
-
-    setValue('hasfocus', String(state.hasFocus), state.hasFocus ? 'ok' : 'bad');
-    setValue('laststate', state.lastWindowState, state.lastWindowState === 'focus' ? 'ok' : 'bad');
-    setValue('focusCount', String(state.focusCount), 'ok');
-    setValue('blurCount', String(state.blurCount), 'bad');
-
-    setValue('fullscreenEl', state.fullscreenElement ? state.fullscreenElement.tagName : '(none)', state.fullscreenElement ? 'accent' : '');
-    setValue('innerWH', `${state.innerW} × ${state.innerH}`);
-    setValue('outerWH', `${state.outerW} × ${state.outerH}`);
-    setValue('screenWH', `${state.screenW} × ${state.screenH}`);
-
-    setValue('tickCount', String(state.tickCount));
-    setValue('lastTickInterval', state.lastTickInterval);
-    setValue('fps', String(state.fps));
+  function updateStatus() {
+    const active = state.monitor && (state.devtoolsLikely || state.signals > 0);
+    $('antiStatus').classList.toggle('warn', active);
+    $('antiTitle').textContent = !state.monitor ? 'Giám sát heuristic đã tắt' : (state.devtoolsLikely ? 'Có thể có công cụ/dock làm đổi kích thước' : (state.signals ? 'Đã ghi nhận tín hiệu DevTools/shortcut' : 'Giám sát nhẹ đang hoạt động'));
+    $('antiDescription').textContent = !state.monitor ? 'Không kiểm tra kích thước hoặc ghi nhận phím tắt DevTools.' : 'Đây chỉ là tín hiệu không chắc chắn; trang không ngăn hoặc khóa công cụ phát triển.';
+    $('signalCount').textContent = String(state.signals);
+    $('devShortcut').textContent = state.shortcut;
   }
-
-  function updateDimensions() {
-    state.innerW = window.innerWidth;
-    state.innerH = window.innerHeight;
-    state.outerW = window.outerWidth;
-    state.outerH = window.outerHeight;
-    state.screenW = screen.width;
-    state.screenH = screen.height;
-    updateUI();
+  function updateBasic() {
+    val('vs', document.visibilityState, document.hidden ? 'warn-text' : 'ok');
+    val('hidden', String(document.hidden), document.hidden ? 'warn-text' : 'ok');
+    val('hasfocus', String(document.hasFocus()), document.hasFocus() ? 'ok' : 'bad');
+    val('focusCounts', `${state.focus} / ${state.blur}`);
+    val('fullscreenEl', document.fullscreenElement ? document.fullscreenElement.tagName : 'Không', document.fullscreenElement ? 'accent' : '');
+    val('tickCount', String(state.ticks)); val('fps', String(state.fps));
+    val('browser', /Edg\//.test(navigator.userAgent) ? 'Edge / Chromium' : (/Chrome\//.test(navigator.userAgent) ? 'Chrome / Chromium' : (navigator.userAgentData?.brands?.map(x=>x.brand).join(', ') || 'Khác')));
+    val('language', navigator.language || '—'); val('online', navigator.onLine ? 'Online' : 'Offline', navigator.onLine ? 'ok' : 'warn-text');
+    val('timezone', Intl.DateTimeFormat().resolvedOptions().timeZone || '—');
   }
-
-  /* ---------- Sự kiện ---------- */
-  document.addEventListener('visibilitychange', () => {
-    state.visibilityState = document.visibilityState;
-    state.hidden = document.hidden;
-    log('visibilitychange', `visibilityState=${state.visibilityState}, hidden=${state.hidden}`, state.hidden ? 'b-hidden' : 'b-vis');
-    updateUI();
+  function detectShortcut(e) {
+    if (!state.monitor || e.repeat) return;
+    const mac = /Mac|iPhone|iPad/.test(navigator.platform);
+    const mod = mac ? e.metaKey && e.altKey : e.ctrlKey && e.shiftKey;
+    const combo = (e.key === 'F12') || (mod && ['i','j','c'].includes(e.key.toLowerCase()));
+    if (!combo) return;
+    const label = e.key === 'F12' ? 'F12' : `${mac ? 'Cmd+Option' : 'Ctrl+Shift'}+${e.key.toUpperCase()}`;
+    state.shortcut = label; state.signals++;
+    log('devtools-shortcut', `Ghi nhận phím ${label}; không chặn phím để người dùng vẫn điều khiển trình duyệt.`);
+    updateStatus();
+  }
+  document.addEventListener('visibilitychange', () => { updateBasic(); log('visibility', `visibilityState=${document.visibilityState}, hidden=${document.hidden}`); });
+  window.addEventListener('focus', () => { state.focus++; updateBasic(); log('focus', 'Cửa sổ lấy lại focus'); });
+  window.addEventListener('blur', () => { state.blur++; updateBasic(); log('blur', 'Cửa sổ mất focus'); });
+  document.addEventListener('fullscreenchange', () => { updateBasic(); dimensions(); log('fullscreen', document.fullscreenElement ? 'Đã bật fullscreen' : 'Đã thoát fullscreen'); });
+  document.addEventListener('fullscreenerror', () => log('fullscreen-error', 'Trình duyệt từ chối yêu cầu fullscreen'));
+  window.addEventListener('resize', () => { dimensions(); log('resize', `inner=${innerWidth}×${innerHeight}, outer=${outerWidth}×${outerHeight}`); });
+  window.addEventListener('keydown', detectShortcut, true);
+  window.addEventListener('online', () => { updateBasic(); log('network', 'Kết nối mạng khả dụng'); });
+  window.addEventListener('offline', () => { updateBasic(); log('network', 'Trình duyệt báo offline'); });
+  $('btnFullscreen').addEventListener('click', async () => {
+    try { if (!document.fullscreenElement) await document.documentElement.requestFullscreen(); else await document.exitFullscreen(); }
+    catch (err) { log('fullscreen-error', err?.message || 'Không thể bật fullscreen'); }
   });
-
-  window.addEventListener('focus', () => {
-    state.hasFocus = true;
-    state.lastWindowState = 'focus';
-    state.focusCount++;
-    log('focus', 'Cửa sổ lấy lại focus', 'b-focus');
-    updateUI();
+  $('btnPause').addEventListener('click', () => { state.paused = !state.paused; $('btnPause').textContent = state.paused ? 'Tiếp tục log' : 'Tạm dừng log'; if (!state.paused) log('system', 'Đã tiếp tục ghi log'); });
+  $('btnReset').addEventListener('click', () => { state.entries = []; renderLog(); log('system', 'Log đã được xóa'); });
+  $('btnExport').addEventListener('click', () => {
+    const text = state.entries.map(e => `[${e.time}] [${e.type}] ${e.msg}`).join('\n') || 'Chưa có sự kiện.';
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], {type:'text/plain;charset=utf-8'})); a.download = 'browser-lab-log.txt'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); log('system', 'Đã tạo tệp log để tải xuống');
   });
-
-  window.addEventListener('blur', () => {
-    state.hasFocus = false;
-    state.lastWindowState = 'blur';
-    state.blurCount++;
-    log('blur', 'Cửa sổ mất focus', 'b-blur');
-    updateUI();
+  $('btnCopy').addEventListener('click', async () => {
+    const text = state.entries.map(e => `[${e.time}] [${e.type}] ${e.msg}`).join('\n');
+    try { await navigator.clipboard.writeText(text); log('system', 'Đã copy log vào clipboard'); }
+    catch { log('system', 'Không copy được; hãy dùng Tải log (.txt)'); }
   });
+  $('logSearch').addEventListener('input', renderLog);
+  $('monitorToggle').addEventListener('change', (e) => { state.monitor = e.target.checked; if (!state.monitor) { state.devtoolsLikely = false; val('devStatus', 'Đã tắt', ''); } dimensions(); updateStatus(); log('system', state.monitor ? 'Đã bật giám sát heuristic' : 'Đã tắt giám sát heuristic'); });
+  document.addEventListener('contextmenu', () => log('contextmenu', 'Menu chuột phải được mở (không bị chặn)'), {passive:true});
 
-  document.addEventListener('fullscreenchange', () => {
-    state.fullscreenElement = document.fullscreenElement || null;
-    log('fullscreenchange', `fullscreenElement=${state.fullscreenElement ? state.fullscreenElement.tagName : '(none)'}`);
-    updateDimensions();
-  });
-
-  document.addEventListener('fullscreenerror', () => {
-    log('fullscreenerror', 'Yêu cầu toàn màn hình bị từ chối');
-    updateUI();
-  });
-
-  window.addEventListener('resize', () => {
-    updateDimensions();
-    log('resize', `inner=${window.innerWidth}x${window.innerHeight}, outer=${window.outerWidth}x${window.outerHeight}`);
-  });
-
-  /* ---------- Tick nền 100 ms ---------- */
-  let lastTickTimestamp = null;
   setInterval(() => {
     const now = performance.now();
-    const interval = lastTickTimestamp ? ((now - lastTickTimestamp).toFixed(1) + ' ms') : '—';
-    lastTickTimestamp = now;
-    state.tickCount++;
-    state.lastTickInterval = interval;
-    state.lastTickTime = nowStr();
-    updateUI();
+    const elapsed = state.lastTick === null ? 100 : now - state.lastTick;
+    if (state.lastTick !== null) val('lastTickInterval', `${elapsed.toFixed(1)} ms`);
+    state.lastTick = now; state.ticks++; val('tickCount', String(state.ticks));
+    const lag = Math.max(0, elapsed - 100);
+    val('eventLoopLag', `${lag.toFixed(1)} ms`, lag > 250 ? 'warn-text' : '');
   }, 100);
-
-  /* ---------- FPS ---------- */
-  let frameCount = 0;
-  let lastFpsTime = performance.now();
-  function tickFrame() {
-    frameCount++;
-    const now = performance.now();
-    if (now - lastFpsTime >= 1000) {
-      state.fps = frameCount;
-      frameCount = 0;
-      lastFpsTime = now;
-      setValue('fps', String(state.fps));
-    }
-    requestAnimationFrame(tickFrame);
-  }
-  requestAnimationFrame(tickFrame);
-
-  /* ---------- Nút điều khiển ---------- */
-  $('btnFullscreen').addEventListener('click', async () => {
-    try {
-      if (!document.fullscreenElement) {
-        await document.documentElement.requestFullscreen();
-      } else {
-        await document.exitFullscreen();
-      }
-    } catch (err) {
-      log('fullscreenerror', err.message || 'Không thể vào chế độ toàn màn hình');
-    }
-  });
-
-  $('btnReset').addEventListener('click', () => {
-    $('log').innerHTML = '';
-    log('system', 'Log đã được reset');
-  });
-
-  /* ---------- Khởi tạo ---------- */
-  updateDimensions();
-  log('system', 'Trang đã tải sẵn sàng kiểm tra');
+  let frames = 0, fpsStart = performance.now();
+  function frame() { frames++; const n = performance.now(); if (n - fpsStart >= 1000) { state.fps = Math.round(frames * 1000 / (n - fpsStart)); frames = 0; fpsStart = n; val('fps', String(state.fps)); } requestAnimationFrame(frame); }
+  $('monitorToggle').checked = state.monitor;
+  updateBasic(); dimensions(); updateStatus(); renderLog(); log('system', 'Browser Lab sẵn sàng — dữ liệu chỉ xử lý trong trang này.');
+  requestAnimationFrame(frame);
+})();
 </script>
 </body>
 </html>
